@@ -1,5 +1,7 @@
 package com.example.lacticoop.services;
 
+import android.util.Log;
+
 import com.example.lacticoop.models.Photo;
 
 import org.json.JSONArray;
@@ -29,7 +31,7 @@ public class PhotoService {
             @Override
             public List<Photo> call() {
                 HttpURLConnection httpURLConnection = null;
-                BufferedReader reader = null;
+                BufferedReader reader;
                 try {
 
                     httpURLConnection = (HttpURLConnection) new URL(URL).openConnection();
@@ -40,16 +42,17 @@ public class PhotoService {
 
                     reader = new BufferedReader(new InputStreamReader(stream));
 
-                    String line = "";
-                    String data = "";
+                    String line;
+                    StringBuilder data = new StringBuilder();
                     while ((line = reader.readLine()) != null) {
-                        data = data + line;
+                        data.append(line);
                     }
 
-                    JSONObject object = new JSONObject(data).getJSONObject("photos");
+                    JSONObject object = new JSONObject(data.toString()).getJSONObject("photos");
                     JSONArray jsonArray = object.optJSONArray("photo");
                     List<Photo> photoList = new ArrayList<>();
 
+                    assert jsonArray != null;
                     for (int i = 0; i < jsonArray.length(); i++){
                         JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
@@ -68,6 +71,7 @@ public class PhotoService {
                     return photoList;
 
                 } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 } finally {
                     if (httpURLConnection != null) {

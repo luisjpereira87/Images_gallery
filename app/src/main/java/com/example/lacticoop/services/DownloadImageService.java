@@ -25,18 +25,18 @@ import java.util.concurrent.Future;
 
 public class DownloadImageService {
 
-    String url = "";
+    String url1 = "";
 
-    public ImageView get(String t, ImageView bmImage) throws InterruptedException, ExecutionException
+    public ImageView get(String url, ImageView bmImage) throws InterruptedException, ExecutionException
     {
-        this.url = t;
+        this.url1 = url;
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<Bitmap> callable = new Callable<Bitmap>() {
             @Override
             public Bitmap call() {
                 Bitmap bmp = null;
                 try {
-                    InputStream in = new java.net.URL(url).openStream();
+                    InputStream in = new java.net.URL(url1).openStream();
                     bmp = BitmapFactory.decodeStream(in);
                 } catch (Exception e) {
                     Log.e("Error", e.getMessage());
